@@ -376,9 +376,9 @@ namespace GameAnalyticsSDK.Net.Events
 				JSONArray events = GAStore.ExecuteQuerySync(selectSql);
 				
 				// Check for errors or empty
-				if(events == null)
+				if(events == null || events.Count == 0)
 				{
-					GALogger.I("Event queue: No events to send");
+					GALogger.II("Event queue: No events to send");
 					return;
 				}
 				
@@ -508,7 +508,7 @@ namespace GameAnalyticsSDK.Net.Events
             string sql = "SELECT timestamp, event FROM ga_session WHERE session_id != $session_id;";
 			JSONArray sessions = GAStore.ExecuteQuerySync(sql, parameters);
 
-			if (sessions == null)
+			if (sessions == null || sessions.Count == 0)
 			{
 				return;
 			}
