@@ -35,23 +35,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.4.3.8\lib\net45\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data.SQLite">
       <HintPath>..\3rd\System.Data.SQLite\System.Data.SQLite.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="native\" />
-    <Folder Include="native\win32\" />
-    <Folder Include="native\win64\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="native\win32\sqlite3.dll">

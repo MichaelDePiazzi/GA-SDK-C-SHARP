@@ -3,12 +3,6 @@
 using Windows.Foundation.Diagnostics;
 using MetroLog;
 using MetroLog.Targets;
-#elif MONO
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-using GameAnalyticsSDK.Net.Device;
-using System.IO;
 #endif
 
 namespace GameAnalyticsSDK.Net.Logging
@@ -29,9 +23,7 @@ namespace GameAnalyticsSDK.Net.Logging
         private IFileLoggingSession session;
         private ILoggingChannel logger;
         private ILogger log;
-#elif MONO
-		private static ILogger logger;
-#elif !UNITY
+#elif !MONO && !UNITY
         private ILogger logger;
 #endif
 
@@ -78,27 +70,6 @@ namespace GameAnalyticsSDK.Net.Logging
 
             LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Trace, LogLevel.Fatal, new StreamingFileTarget());
             log = LogManagerFactory.DefaultLogManager.GetLogger<GALogger>();
-#elif MONO
-			logger = LogManager.GetCurrentClassLogger();
-			var config = new LoggingConfiguration();
-
-			var consoleTarget = new ColoredConsoleTarget();
-			config.AddTarget("console", consoleTarget);
-
-			var fileTarget = new FileTarget();
-			config.AddTarget("file", fileTarget);
-
-			consoleTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
-			fileTarget.FileName = GADevice.WritablePath + Path.DirectorySeparatorChar + "ga_log.txt";
-			fileTarget.Layout = "${message}";
-
-			var rule1 = new LoggingRule("*", LogLevel.Debug, consoleTarget);
-			config.LoggingRules.Add(rule1);
-
-			var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
-			config.LoggingRules.Add(rule2);
-
-			LogManager.Configuration = config;
 #endif
         }
 
@@ -157,6 +128,9 @@ namespace GameAnalyticsSDK.Net.Logging
 		{
             GameAnalytics.MessageLogged(message, type);
 
+#if MONO
+            Console.WriteLine($"{DateTime.Now:HH:mm:ss} {typeof(GALogger).FullName} {formattedMessage}");
+#else
 			switch(type)
 			{
 				case EGALoggerMessageType.Error:
@@ -166,8 +140,6 @@ namespace GameAnalyticsSDK.Net.Logging
 #elif WINDOWS_UWP || WINDOWS_WSA
                         logger.LogMessage(formattedMessage, LoggingLevel.Error);
                         log.Error(formattedMessage);
-#elif MONO
-						logger.Error(formattedMessage);
 #else
                         logger.LogError(formattedMessage);
 #endif
@@ -181,8 +153,6 @@ namespace GameAnalyticsSDK.Net.Logging
 #elif WINDOWS_UWP || WINDOWS_WSA
                         logger.LogMessage(formattedMessage, LoggingLevel.Warning);
                         log.Warn(formattedMessage);
-#elif MONO
-						logger.Warn(formattedMessage);
 #else
                         logger.LogWarning(formattedMessage);
 #endif
@@ -196,8 +166,6 @@ namespace GameAnalyticsSDK.Net.Logging
 #elif WINDOWS_UWP || WINDOWS_WSA
                         logger.LogMessage(formattedMessage, LoggingLevel.Information);
                         log.Debug(formattedMessage);
-#elif MONO
-						logger.Debug(formattedMessage);
 #else
                         logger.LogDebug(formattedMessage);
 #endif
@@ -211,14 +179,13 @@ namespace GameAnalyticsSDK.Net.Logging
 #elif WINDOWS_UWP || WINDOWS_WSA
                         logger.LogMessage(formattedMessage, LoggingLevel.Information);
                         log.Info(formattedMessage);
-#elif MONO
-						logger.Info(formattedMessage);
 #else
                         logger.LogInformation(formattedMessage);
 #endif
                     }
                     break;
 			}
+#endif
 		}
 
 #endregion // Private methods
