@@ -155,6 +155,8 @@ namespace GameAnalyticsSDK.Net.Logging
 
 		private void SendNotificationMessage(string message, EGALoggerMessageType type)
 		{
+            GameAnalytics.MessageLogged(message, type);
+
 			switch(type)
 			{
 				case EGALoggerMessageType.Error:
@@ -164,12 +166,10 @@ namespace GameAnalyticsSDK.Net.Logging
 #elif WINDOWS_UWP || WINDOWS_WSA
                         logger.LogMessage(message, LoggingLevel.Error);
                         log.Error(message);
-                        GameAnalytics.MessageLogged(message, type);
 #elif MONO
 						logger.Error(message);
 #else
                         logger.LogError(message);
-                        GameAnalytics.MessageLogged(message, type);
 #endif
                     }
                     break;
@@ -181,12 +181,10 @@ namespace GameAnalyticsSDK.Net.Logging
 #elif WINDOWS_UWP || WINDOWS_WSA
                         logger.LogMessage(message, LoggingLevel.Warning);
                         log.Warn(message);
-                        GameAnalytics.MessageLogged(message, type);
 #elif MONO
 						logger.Warn(message);
 #else
                         logger.LogWarning(message);
-                        GameAnalytics.MessageLogged(message, type);
 #endif
                     }
                     break;
@@ -198,12 +196,10 @@ namespace GameAnalyticsSDK.Net.Logging
 #elif WINDOWS_UWP || WINDOWS_WSA
                         logger.LogMessage(message, LoggingLevel.Information);
                         log.Debug(message);
-                        GameAnalytics.MessageLogged(message, type);
 #elif MONO
 						logger.Debug(message);
 #else
                         logger.LogDebug(message);
-                        GameAnalytics.MessageLogged(message, type);
 #endif
                     }
                     break;
@@ -215,12 +211,10 @@ namespace GameAnalyticsSDK.Net.Logging
 #elif WINDOWS_UWP || WINDOWS_WSA
                         logger.LogMessage(message, LoggingLevel.Information);
                         log.Info(message);
-                        GameAnalytics.MessageLogged(message, type);
 #elif MONO
 						logger.Info(message);
 #else
                         logger.LogInformation(message);
-                        GameAnalytics.MessageLogged(message, type);
 #endif
                     }
                     break;
