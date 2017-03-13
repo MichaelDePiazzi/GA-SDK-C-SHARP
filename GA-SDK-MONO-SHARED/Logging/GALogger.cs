@@ -104,56 +104,56 @@ namespace GameAnalyticsSDK.Net.Logging
 
         #region Public methods
 
-        public static void I(String format)
+        public static void I(String message)
 		{
 			if(!Instance.infoLogEnabled)
 			{
 				return;
 			}
 
-			string message = "Info/" + Tag + ": " + format;
-			Instance.SendNotificationMessage(message, EGALoggerMessageType.Info);
+			string formattedMessage = "Info/" + Tag + ": " + message;
+			Instance.SendNotificationMessage(message, formattedMessage, EGALoggerMessageType.Info);
 		}
 
-		public static void W(String format)
+		public static void W(String message)
 		{
-			string message = "Warning/" + Tag + ": " + format;
-			Instance.SendNotificationMessage(message, EGALoggerMessageType.Warning);
+			string formattedMessage = "Warning/" + Tag + ": " + message;
+			Instance.SendNotificationMessage(message, formattedMessage, EGALoggerMessageType.Warning);
 		}
 
-		public static void E(String format)
+		public static void E(String message)
 		{
-			string message = "Error/" + Tag + ": " + format;
-			Instance.SendNotificationMessage(message, EGALoggerMessageType.Error);
+			string formattedMessage = "Error/" + Tag + ": " + message;
+			Instance.SendNotificationMessage(message, formattedMessage, EGALoggerMessageType.Error);
 		}
 
-		public static void II(String format)
+		public static void II(String message)
 		{
 			if(!Instance.infoLogVerboseEnabled)
 			{
 				return;
 			}
 
-			string message = "Verbose/" + Tag + ": " + format;
-			Instance.SendNotificationMessage(message, EGALoggerMessageType.Info);
+			string formattedMessage = "Verbose/" + Tag + ": " + message;
+			Instance.SendNotificationMessage(message, formattedMessage, EGALoggerMessageType.Info);
 		}
 
-		public static void D(String format)
+		public static void D(String message)
 		{
 			if(!debugEnabled)
 			{
 				return;
 			}
 
-			string message = "Debug/" + Tag + ": " + format;
-			Instance.SendNotificationMessage(message, EGALoggerMessageType.Debug);
+			string formattedMessage = "Debug/" + Tag + ": " + message;
+			Instance.SendNotificationMessage(message, formattedMessage, EGALoggerMessageType.Debug);
 		}
 
 #endregion // Public methods
 
 #region Private methods
 
-		private void SendNotificationMessage(string message, EGALoggerMessageType type)
+		private void SendNotificationMessage(string message, string formattedMessage, EGALoggerMessageType type)
 		{
             GameAnalytics.MessageLogged(message, type);
 
@@ -162,14 +162,14 @@ namespace GameAnalyticsSDK.Net.Logging
 				case EGALoggerMessageType.Error:
 					{
 #if UNITY
-                        UnityEngine.Debug.LogError(message);
+                        UnityEngine.Debug.LogError(formattedMessage);
 #elif WINDOWS_UWP || WINDOWS_WSA
-                        logger.LogMessage(message, LoggingLevel.Error);
-                        log.Error(message);
+                        logger.LogMessage(formattedMessage, LoggingLevel.Error);
+                        log.Error(formattedMessage);
 #elif MONO
-						logger.Error(message);
+						logger.Error(formattedMessage);
 #else
-                        logger.LogError(message);
+                        logger.LogError(formattedMessage);
 #endif
                     }
                     break;
@@ -177,14 +177,14 @@ namespace GameAnalyticsSDK.Net.Logging
 				case EGALoggerMessageType.Warning:
 					{
 #if UNITY
-                        UnityEngine.Debug.LogWarning(message);
+                        UnityEngine.Debug.LogWarning(formattedMessage);
 #elif WINDOWS_UWP || WINDOWS_WSA
-                        logger.LogMessage(message, LoggingLevel.Warning);
-                        log.Warn(message);
+                        logger.LogMessage(formattedMessage, LoggingLevel.Warning);
+                        log.Warn(formattedMessage);
 #elif MONO
-						logger.Warn(message);
+						logger.Warn(formattedMessage);
 #else
-                        logger.LogWarning(message);
+                        logger.LogWarning(formattedMessage);
 #endif
                     }
                     break;
@@ -192,14 +192,14 @@ namespace GameAnalyticsSDK.Net.Logging
 				case EGALoggerMessageType.Debug:
 					{
 #if UNITY
-                        UnityEngine.Debug.Log(message);
+                        UnityEngine.Debug.Log(formattedMessage);
 #elif WINDOWS_UWP || WINDOWS_WSA
-                        logger.LogMessage(message, LoggingLevel.Information);
-                        log.Debug(message);
+                        logger.LogMessage(formattedMessage, LoggingLevel.Information);
+                        log.Debug(formattedMessage);
 #elif MONO
-						logger.Debug(message);
+						logger.Debug(formattedMessage);
 #else
-                        logger.LogDebug(message);
+                        logger.LogDebug(formattedMessage);
 #endif
                     }
                     break;
@@ -207,14 +207,14 @@ namespace GameAnalyticsSDK.Net.Logging
 				case EGALoggerMessageType.Info:
 					{
 #if UNITY
-                        UnityEngine.Debug.Log(message);
+                        UnityEngine.Debug.Log(formattedMessage);
 #elif WINDOWS_UWP || WINDOWS_WSA
-                        logger.LogMessage(message, LoggingLevel.Information);
-                        log.Info(message);
+                        logger.LogMessage(formattedMessage, LoggingLevel.Information);
+                        log.Info(formattedMessage);
 #elif MONO
-						logger.Info(message);
+						logger.Info(formattedMessage);
 #else
-                        logger.LogInformation(message);
+                        logger.LogInformation(formattedMessage);
 #endif
                     }
                     break;
