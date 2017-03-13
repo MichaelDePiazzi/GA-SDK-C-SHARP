@@ -12,6 +12,7 @@ namespace GameAnalyticsSDK.Net.Logging
 #region Fields and properties
 
 		private static readonly GALogger _instance = new GALogger();
+	    private bool consoleLoggingEnabled;
 		private bool infoLogEnabled;
 		private bool infoLogVerboseEnabled;
 #pragma warning disable 0649
@@ -34,6 +35,14 @@ namespace GameAnalyticsSDK.Net.Logging
 				return _instance;
 			}
 		}
+
+	    public static bool ConsoleLogging
+	    {
+	        set
+	        {
+	            Instance.consoleLoggingEnabled = value;
+	        }
+	    }
 
 		public static bool InfoLog 
 		{
@@ -70,6 +79,8 @@ namespace GameAnalyticsSDK.Net.Logging
 
             LogManagerFactory.DefaultConfiguration.AddTarget(LogLevel.Trace, LogLevel.Fatal, new StreamingFileTarget());
             log = LogManagerFactory.DefaultLogManager.GetLogger<GALogger>();
+#elif MONO
+            consoleLoggingEnabled = true;
 #endif
         }
 
@@ -128,9 +139,10 @@ namespace GameAnalyticsSDK.Net.Logging
 		{
             GameAnalytics.MessageLogged(message, type);
 
-#if MONO
-            Console.WriteLine($"{DateTime.Now:HH:mm:ss} {typeof(GALogger).FullName} {formattedMessage}");
-#else
+            if (consoleLoggingEnabled)
+                Console.WriteLine($"{DateTime.Now:HH:mm:ss} {typeof(GALogger).FullName} {formattedMessage}");
+
+#if !MONO
 			switch(type)
 			{
 				case EGALoggerMessageType.Error:

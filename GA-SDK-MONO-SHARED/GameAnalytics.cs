@@ -368,6 +368,14 @@ namespace GameAnalyticsSDK.Net
 
 		#region SET STATE CHANGES WHILE RUNNING
 
+        public static void SetEnabledConsoleLogging(bool flag)
+        {
+            GAThreading.PerformTaskOnGAThread("setEnabledConsoleLogging", () =>
+            {
+                GALogger.ConsoleLogging = flag;
+            });
+        }
+
 		public static void SetEnabledInfoLog(bool flag)
 		{
 			GAThreading.PerformTaskOnGAThread("setEnabledInfoLog", () =>
