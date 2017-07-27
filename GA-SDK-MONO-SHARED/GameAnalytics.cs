@@ -171,12 +171,13 @@ namespace GameAnalyticsSDK.Net
 
 		#region INITIALIZE
 
-		public static void Initialize(string gameKey, string gameSecret)
+		public static void Initialize(string gameKey, string gameSecret, string writablePath = null)
 		{
 #if WINDOWS_UWP || WINDOWS_WSA
             CoreApplication.Suspending += OnSuspending;
             CoreApplication.Resuming += OnResuming;
 #endif
+            GADevice.SetWritablePath(writablePath);
             GADevice.UpdateConnectionType();
 
 			GAThreading.PerformTaskOnGAThread("initialize", () =>

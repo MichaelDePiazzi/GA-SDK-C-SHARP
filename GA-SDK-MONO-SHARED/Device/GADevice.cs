@@ -39,7 +39,7 @@ namespace GameAnalyticsSDK.Net.Device
 #else
         private static readonly string _deviceModel = "unknown";
 #endif
-        private static string _writablepath = GetPersistentPath();
+        private static string _writablepath;
 #endif
         private static readonly string _osVersion = GetOSVersionString();
 #if WINDOWS_UWP || WINDOWS_WSA
@@ -474,6 +474,11 @@ namespace GameAnalyticsSDK.Net.Device
 			}
 		}
 #endif
+
+	    public static void SetWritablePath(string path)
+	    {
+	        _writablepath = string.IsNullOrEmpty(path) ? GetPersistentPath() : path;
+	    }
 
         private static string GetPersistentPath()
 		{
